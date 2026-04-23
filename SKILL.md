@@ -1,4 +1,4 @@
-# claw-voice
+# claw-voice-local
 
 **Local offline TTS → Telegram Voice Note**
 

@@ -11,8 +11,11 @@ Usage:
   echo "Hello" | python3 say.py
 
 Environment variables:
-  TELEGRAM_BOT_TOKEN   Required: your Telegram bot token
-  TELEGRAM_CHAT_ID     Default chat ID (can be overridden with --chat-id)
+  TELEGRAM_BOT_TOKEN   Required for Telegram: your bot token
+  TELEGRAM_CHAT_ID     Default Telegram chat ID (can be overridden with --chat-id)
+  DISCORD_WEBHOOK_URL  Required for Discord: your webhook URL
+
+⚠️  Discord support is UNTESTED (feature branch)
 """
 
 import argparse
@@ -34,6 +37,8 @@ def main():
         description="Send a text as a Telegram voice note via piper TTS"
     )
     parser.add_argument("text", nargs="?", help="Text to speak (or use stdin)")
+    parser.add_argument("--channel", choices=["telegram", "discord"], default="telegram",
+                        help="Delivery channel (default: telegram)")
     parser.add_argument("--chat-id", help="Telegram chat ID (or set TELEGRAM_CHAT_ID env var)")
     parser.add_argument("--speed", default=DEFAULT_SPEED, help="Speech speed (default: 0.85, lower=slower)")
     parser.add_argument("--model", help="Path to piper .onnx voice model")
@@ -51,9 +56,9 @@ def main():
         print("ERROR: Empty text", file=sys.stderr)
         sys.exit(1)
 
-    # Chat ID from argument or env
+    # Chat ID only required for Telegram
     chat_id = args.chat_id or os.environ.get("TELEGRAM_CHAT_ID")
-    if not chat_id:
+    if args.channel == "telegram" and not chat_id:
         print("ERROR: Provide --chat-id or set TELEGRAM_CHAT_ID env var", file=sys.stderr)
         sys.exit(1)
 
@@ -69,11 +74,13 @@ def main():
 
         subprocess.run(speak_cmd, check=True, capture_output=True, text=True)
 
-        # Step 2: OGG → Telegram Voice Note
-        subprocess.run(
-            [sys.executable, str(SEND), str(ogg), "--chat-id", chat_id],
-            check=True
-        )
+        # Step 2: OGG → voice message
+        if args.channel == "discord":
+            send_cmd = [sys.executable, str(SKILL_DIR / "send_discord.py"), str(ogg)]
+        else:
+            send_cmd = [sys.executable, str(SEND), str(ogg), "--chat-id", chat_id]
+
+        subprocess.run(send_cmd, check=True)
 
     except subprocess.CalledProcessError as e:
         print(f"ERROR: {e}", file=sys.stderr)

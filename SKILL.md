@@ -26,6 +26,18 @@ Set these environment variables (or add to `~/.openclaw/.env`):
 | `TELEGRAM_BOT_TOKEN` | Yes | Your Telegram bot token |
 | `TELEGRAM_CHAT_ID` | Optional | Default chat ID (can be passed as `--chat-id`) |
 
+## Environment Variables
+
+```
+TELEGRAM_BOT_TOKEN=required   # Telegram bot token — get one from @BotFather
+TELEGRAM_CHAT_ID=optional     # Default target chat ID
+```
+
+## Config File
+
+This skill reads `~/.openclaw/.env` as a fallback for credentials.
+Ensure the file has restricted permissions: `chmod 600 ~/.openclaw/.env`
+
 ## Installation
 
 See [README.md](README.md) for step-by-step piper installation.

@@ -1,3 +1,16 @@
+---
+name: claw-voice-local
+description: Convert text to offline Telegram voice messages using piper TTS. Use when the agent should speak a response, send audio, or deliver voice notes via Telegram without internet connectivity.
+license: MIT
+compatibility: Requires piper TTS binary (Linux ARM64 or x86_64), ffmpeg, and a Telegram bot token. Python 3.11+.
+metadata:
+  author: photon78
+  version: "1.0.0"
+  env_required: TELEGRAM_BOT_TOKEN
+  env_optional: TELEGRAM_CHAT_ID
+  config_file: ~/.openclaw/.env (fallback for credentials)
+---
+
 # claw-voice-local
 
 **Local offline TTS → Telegram Voice Note**

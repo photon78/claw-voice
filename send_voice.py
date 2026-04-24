@@ -10,7 +10,7 @@ Usage:
 
 Token resolution order:
   1. TELEGRAM_BOT_TOKEN environment variable
-  2. ~/.openclaw/.env file
+  2. TELEGRAM_CHAT_ID environment variable (for --chat-id)
 """
 
 import argparse
@@ -18,18 +18,6 @@ import json
 import os
 import sys
 from pathlib import Path
-
-
-def _load_env_file(env_path: Path) -> dict:
-    """Parse a simple KEY=VALUE .env file."""
-    env = {}
-    if env_path.exists():
-        for line in env_path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                key, _, val = line.partition("=")
-                env[key.strip()] = val.strip().strip('"').strip("'")
-    return env
 
 
 def send_voice(ogg_path: Path, chat_id: str, bot_token: str, caption: str | None = None) -> dict:
@@ -93,12 +81,11 @@ def main():
         sys.exit(1)
 
     # Resolve bot token
-    env_file = _load_env_file(Path.home() / ".openclaw" / ".env")
-    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN") or env_file.get("TELEGRAM_BOT_TOKEN")
+    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
     if not bot_token:
         print(
             "ERROR: TELEGRAM_BOT_TOKEN not found.\n"
-            "  Set it as environment variable or add to ~/.openclaw/.env",
+            "  Set it as environment variable: export TELEGRAM_BOT_TOKEN=your_token",
             file=sys.stderr,
         )
         sys.exit(1)

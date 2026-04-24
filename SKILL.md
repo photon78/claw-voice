@@ -8,7 +8,6 @@ metadata:
   version: "1.0.0"
   env_required: TELEGRAM_BOT_TOKEN
   env_optional: TELEGRAM_CHAT_ID
-  config_file: ~/.openclaw/.env (fallback for credentials)
 ---
 
 # claw-voice-local

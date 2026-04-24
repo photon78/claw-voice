@@ -81,12 +81,14 @@ wget -P ~/.local/share/piper \
 
 ### 4. Configure environment
 
-Add to your `~/.openclaw/.env` (or export as env vars):
+Export as environment variables (e.g. in your shell profile or OpenClaw env config):
 
+```bash
+export TELEGRAM_BOT_TOKEN=your_bot_token_here
+export TELEGRAM_CHAT_ID=your_chat_id_here  # optional default target
 ```
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
-```
+
+OpenClaw users: set these in your agent's environment via `openclaw.json` or the OpenClaw plugin config.
 
 ### 5. Test it
 
